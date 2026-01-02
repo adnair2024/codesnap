@@ -2,6 +2,7 @@ import os
 from flask import Flask, render_template, redirect, url_for, request, flash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from models import db, User, Snippet, Vote
+from sqlalchemy import func, text
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key')
@@ -22,6 +23,12 @@ db.init_app(app)
 # Ensure tables are created on startup
 with app.app_context():
     db.create_all()
+    # Migration hack: Increase password_hash length for existing tables
+    try:
+        db.session.execute(text('ALTER TABLE "user" ALTER COLUMN password_hash TYPE VARCHAR(256)'))
+        db.session.commit()
+    except Exception:
+        db.session.rollback()
 
 login_manager = LoginManager()
 login_manager.login_view = 'login'
@@ -69,8 +76,6 @@ def register():
 def logout():
     logout_user()
     return redirect(url_for('index'))
-
-from sqlalchemy import func
 
 @app.route('/user/<username>')
 def profile(username):
