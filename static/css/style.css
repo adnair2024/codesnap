@@ -15,6 +15,10 @@ body {
     overflow-x: hidden;
 }
 
+.text-muted {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
 #bg-canvas {
     position: fixed;
     top: 0;

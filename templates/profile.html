@@ -9,6 +9,21 @@
             {% endif %}
         </div>
         
+        <div class="row mb-4">
+            <div class="col-6">
+                <div class="glass-container text-center py-3">
+                    <h2 class="mb-0">{{ snippet_count }}</h2>
+                    <small class="text-muted">Snippets</small>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="glass-container text-center py-3">
+                    <h2 class="mb-0">{{ total_score }}</h2>
+                    <small class="text-muted">Reputation</small>
+                </div>
+            </div>
+        </div>
+        
         {% for snippet in snippets %}
             <div class="glass-container snippet-card">
                 <div class="d-flex justify-content-between align-items-start mb-2">
