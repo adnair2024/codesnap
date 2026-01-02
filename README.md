@@ -77,13 +77,14 @@ codeSnap isn't just a tool; it's a visual experience.
    pip install -r requirements.txt
    ```
 
-4. **Initialize the Database**
-   The application will automatically create the `snippets.db` file on the first run, but you can manually initialize it:
+5. **Initialize the Database**
+   The application will automatically create the tables on the first run. If using **Neon.tech**, ensure your `DATABASE_URL` is set:
    ```bash
-   python3 -c "from app import app, db; app.app_context().push(); db.create_all()"
+   export DATABASE_URL="postgres://user:password@hostname/dbname?sslmode=require"
+   python3 create_db.py
    ```
 
-5. **Run the Application**
+6. **Run the Application**
    ```bash
    flask run
    ```
