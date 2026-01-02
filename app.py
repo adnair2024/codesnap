@@ -4,8 +4,10 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from models import db, User, Snippet, Vote
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'dev-secret-key' # Should be in .env in production
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///snippets.db'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///snippets.db')
+if app.config['SQLALCHEMY_DATABASE_URI'].startswith("postgres://"):
+    app.config['SQLALCHEMY_DATABASE_URI'] = app.config['SQLALCHEMY_DATABASE_URI'].replace("postgres://", "postgresql://", 1)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)

@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: codesnap
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python create_db.py && gunicorn app:app
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: codesnap-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+
+databases:
+  - name: codesnap-db
+    databaseName: codesnap
+    user: codesnap
