@@ -1,0 +1,234 @@
+:root {
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --text-color: #ffffff;
+    --nav-bg: rgba(255, 255, 255, 0.05);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background-color: #0a0a0a;
+    color: var(--text-color);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    overflow-x: hidden;
+}
+
+#bg-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+}
+
+.glass-nav {
+    background: var(--nav-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.glass-container {
+    background: var(--glass-bg);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    margin-bottom: 2rem;
+    overflow: hidden; /* Fix container rendering issues */
+}
+
+.navbar-brand, .nav-link {
+    color: #fff !important;
+    font-weight: 500;
+}
+
+.snippet-card {
+    transition: transform 0.3s ease;
+}
+
+.snippet-card:hover {
+    transform: translateY(-5px);
+}
+
+.snippet-content {
+    min-width: 0; /* Allows children (pre) to overflow/scroll within a flex item */
+}
+
+.badge-private {
+    background: rgba(255, 59, 48, 0.2);
+    color: #ff3b30;
+    border: 1px solid rgba(255, 59, 48, 0.3);
+}
+
+.badge-public {
+    background: rgba(52, 199, 89, 0.2);
+    color: #34c759;
+    border: 1px solid rgba(52, 199, 89, 0.3);
+}
+
+pre {
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.3) !important;
+    overflow-x: auto; /* Enable horizontal scrolling */
+    white-space: pre; /* Ensure lines don't wrap and instead scroll */
+}
+
+code {
+    white-space: pre;
+}
+
+input, textarea, select {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid var(--glass-border) !important;
+    color: #fff !important;
+    border-radius: 10px !important;
+}
+
+input:focus, textarea:focus {
+    box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.1) !important;
+}
+
+.btn-primary {
+    background: #fff;
+    color: #000;
+    border: none;
+    border-radius: 10px;
+    padding: 0.8rem 2rem;
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    background: #e0e0e0;
+    color: #000;
+}
+
+/* iOS Switch Style */
+.switch-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ios-switch {
+    appearance: none;
+    width: 44px;
+    height: 26px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 13px;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    transition: background 0.3s;
+}
+
+.ios-switch::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 22px;
+    height: 22px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.ios-switch:checked {
+    background: #34c759 !important;
+}
+
+.ios-switch:checked::after {
+    transform: translateX(18px);
+}
+
+/* Vote Buttons */
+.vote-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 1.5rem;
+}
+
+.btn-vote {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    opacity: 0.5;
+    font-size: 1.2rem;
+    padding: 0;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.btn-vote:hover {
+    opacity: 1;
+}
+
+.vote-score {
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+/* Three dots dropdown */
+.dropdown-menu {
+    background: var(--glass-bg);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid var(--glass-border);
+}
+.dropdown-item {
+    color: var(--text-color);
+}
+.dropdown-item:hover {
+    background: rgba(255,255,255,0.1);
+    color: var(--text-color);
+}
+
+/* Light Mode Overrides (At the bottom to ensure precedence) */
+@media (prefers-color-scheme: light) {
+    :root {
+        --glass-bg: rgba(0, 0, 0, 0.05);
+        --glass-border: rgba(0, 0, 0, 0.1);
+        --text-color: #000000;
+        --nav-bg: rgba(0, 0, 0, 0.03);
+    }
+    .navbar-brand, .nav-link, .text-white {
+        color: #000 !important;
+    }
+    .btn-primary {
+        background: #000;
+        color: #fff;
+    }
+    .btn-primary:hover {
+        background: #333;
+        color: #fff;
+    }
+    .text-muted {
+        color: #444 !important; /* Made darker than #666 for better visibility */
+    }
+    input, textarea, select {
+        color: #000 !important;
+        background: rgba(0, 0, 0, 0.05) !important;
+        border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    }
+    .ios-switch {
+        background: rgba(0,0,0,0.2) !important;
+    }
+    .dropdown-item {
+        color: #000;
+    }
+    .dropdown-item:hover {
+        background: rgba(0,0,0,0.1);
+    }
+    /* Ensure the three-dots button is visible in light mode */
+    .btn-link.text-white {
+        color: #000 !important;
+    }
+}

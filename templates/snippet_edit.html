@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="glass-container">
+            <h2 class="mb-4">{% if snippet %}Edit Snippet{% else %}New Snippet{% endif %}</h2>
+            <form method="POST">
+                <div class="mb-3">
+                    <label class="form-label">Title</label>
+                    <input type="text" name="title" class="form-control" placeholder="My Awesome Code" value="{{ snippet.title if snippet else '' }}" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Language</label>
+                    <select name="language" class="form-select">
+                        <option value="javascript" {% if snippet and snippet.language == 'javascript' %}selected{% endif %}>JavaScript</option>
+                        <option value="python" {% if snippet and snippet.language == 'python' %}selected{% endif %}>Python</option>
+                        <option value="css" {% if snippet and snippet.language == 'css' %}selected{% endif %}>CSS</option>
+                        <option value="html" {% if snippet and snippet.language == 'html' %}selected{% endif %}>HTML</option>
+                        <option value="markdown" {% if snippet and snippet.language == 'markdown' %}selected{% endif %}>Markdown</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Code</label>
+                    <textarea name="content" class="form-control" rows="10" required>{{ snippet.content if snippet else '' }}</textarea>
+                </div>
+                <div class="mb-4 switch-container">
+                    <input type="checkbox" name="is_public" class="ios-switch" id="isPublic" {% if snippet and snippet.is_public %}checked{% endif %}>
+                    <label class="form-check-label" for="isPublic" style="cursor: pointer;">Make Public</label>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">{% if snippet %}Update Vault{% else %}Save to Vault{% endif %}</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
