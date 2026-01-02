@@ -5,9 +5,16 @@ from models import db, User, Snippet, Vote
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key')
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///snippets.db')
-if app.config['SQLALCHEMY_DATABASE_URI'].startswith("postgres://"):
-    app.config['SQLALCHEMY_DATABASE_URI'] = app.config['SQLALCHEMY_DATABASE_URI'].replace("postgres://", "postgresql://", 1)
+
+# Robust DATABASE_URL handling
+db_url = os.environ.get('DATABASE_URL', '').strip().strip('"').strip("'")
+if not db_url:
+    db_url = 'sqlite:///snippets.db'
+
+if db_url.startswith("postgres://"):
+    db_url = db_url.replace("postgres://", "postgresql://", 1)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
@@ -58,14 +65,37 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
+from sqlalchemy import func
+
 @app.route('/user/<username>')
 def profile(username):
     user = User.query.filter_by(username=username).first_or_404()
+    
+    # Determine visibility filter
     if current_user.is_authenticated and current_user.id == user.id:
-        snippets = Snippet.query.filter_by(user_id=user.id).order_by(Snippet.created_at.desc()).all()
+        filter_kwargs = {'user_id': user.id}
     else:
-        snippets = Snippet.query.filter_by(user_id=user.id, is_public=True).order_by(Snippet.created_at.desc()).all()
-    return render_template('profile.html', user=user, snippets=snippets)
+        filter_kwargs = {'user_id': user.id, 'is_public': True}
+    
+    # Fetch snippets
+    snippets = Snippet.query.filter_by(**filter_kwargs).order_by(Snippet.created_at.desc()).all()
+    
+    # Calculate stats
+    snippet_count = len(snippets)
+    
+    # Calculate total score using aggregation
+    if snippets:
+        # Join Vote -> Snippet to filter by snippet criteria
+        total_score = db.session.query(func.sum(Vote.value))\
+            .join(Snippet)\
+            .filter(Snippet.user_id == user.id)\
+            .filter(Snippet.id.in_([s.id for s in snippets]))\
+            .filter(Vote.value == 1)\
+            .scalar() or 0
+    else:
+        total_score = 0
+        
+    return render_template('profile.html', user=user, snippets=snippets, snippet_count=snippet_count, total_score=total_score)
 
 @app.route('/vote/<int:snippet_id>/<action>', methods=['POST'])
 @login_required
