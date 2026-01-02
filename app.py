@@ -43,6 +43,10 @@ def index():
     public_snippets = Snippet.query.filter_by(is_public=True).order_by(Snippet.created_at.desc()).limit(10).all()
     return render_template('index.html', snippets=public_snippets)
 
+@app.get("/health")
+def health_check():
+    return {"status": "alive"}, 200
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
