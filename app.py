@@ -45,6 +45,23 @@ login_manager.init_app(app)
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+@app.template_filter('flag')
+def flag_filter(country_name):
+    flags = {
+        'USA': '🇺🇸',
+        'Canada': '🇨🇦',
+        'UK': '🇬🇧',
+        'Germany': '🇩🇪',
+        'France': '🇫🇷',
+        'India': '🇮🇳',
+        'Japan': '🇯🇵',
+        'Australia': '🇦🇺',
+        'Brazil': '🇧🇷',
+        'China': '🇨🇳',
+        'Unknown': '❓'
+    }
+    return flags.get(country_name, '❓')
+
 @app.route('/')
 def index():
     public_snippets = Snippet.query.filter_by(is_public=True).order_by(Snippet.created_at.desc()).limit(10).all()
@@ -71,10 +88,11 @@ def register():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
+        country = request.form.get('country', 'Unknown')
         if User.query.filter_by(username=username).first():
             flash('Username already exists')
         else:
-            user = User(username=username)
+            user = User(username=username, country=country)
             user.set_password(password)
             db.session.add(user)
             db.session.commit()
@@ -228,6 +246,80 @@ def search_users():
             
         flash(f'No user found with name containing "{query}"')
     return redirect(url_for('index'))
+
+@app.route('/stats')
+def stats():
+    # 1. Total Users
+    user_count = User.query.count()
+    
+    # 2. Top 10 Users by Snippet Count
+    top_snippet_users = db.session.query(
+        User.username, 
+        User.country,
+        func.count(Snippet.id).label('count')
+    ).join(Snippet).group_by(User.id).order_by(text('count DESC')).limit(10).all()
+    
+    # 3. Top 10 Users by Reputation (Sum of votes on their snippets)
+    # logic: User -> Snippet -> Vote. Sum(Vote.value)
+    top_reputation_users = db.session.query(
+        User.username,
+        User.country,
+        func.sum(Vote.value).label('reputation')
+    ).join(Snippet, Snippet.user_id == User.id)\
+     .join(Vote, Vote.snippet_id == Snippet.id)\
+     .group_by(User.id)\
+     .order_by(text('reputation DESC'))\
+     .limit(10).all()
+     
+    # 4. Users by Country
+    country_stats = db.session.query(
+        User.country,
+        func.count(User.id).label('count')
+    ).group_by(User.country).all()
+    
+    # Format data for Chart.js
+    country_labels = [stat[0] for stat in country_stats]
+    country_data = [stat[1] for stat in country_stats]
+    
+    return render_template(
+        'stats.html', 
+        user_count=user_count,
+        top_snippet_users=top_snippet_users,
+        top_reputation_users=top_reputation_users,
+        country_labels=country_labels,
+        country_data=country_data
+    )
+
+@app.route('/settings', methods=['GET', 'POST'])
+@login_required
+def settings():
+    if request.method == 'POST':
+        new_username = request.form.get('username')
+        new_password = request.form.get('password')
+        country = request.form.get('country')
+        
+        user = User.query.get(current_user.id)
+        
+        # Username change
+        if new_username and new_username != user.username:
+            if User.query.filter_by(username=new_username).first():
+                flash('Username already exists')
+                return redirect(url_for('settings'))
+            user.username = new_username
+            
+        # Password change
+        if new_password:
+            user.set_password(new_password)
+            
+        # Country change
+        if country:
+            user.country = country
+            
+        db.session.commit()
+        flash('Profile updated successfully!')
+        return redirect(url_for('profile', username=user.username))
+        
+    return render_template('settings.html')
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)

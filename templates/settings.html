@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="glass-container p-4">
+            <h2 class="text-white mb-4 text-center">Profile Settings</h2>
+            
+            <form method="POST">
+                <!-- Username -->
+                <div class="mb-3">
+                    <label for="username" class="form-label text-white">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" value="{{ current_user.username }}" required>
+                    <div class="form-text text-white-50">Choose a unique username.</div>
+                </div>
+                
+                <!-- Password -->
+                <div class="mb-3">
+                    <label for="password" class="form-label text-white">New Password</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Leave blank to keep current password">
+                </div>
+                
+                <!-- Country -->
+                <div class="mb-3">
+                    <label for="country" class="form-label text-white">Country</label>
+                    <select class="form-select" id="country" name="country">
+                        <option value="Unknown" {% if current_user.country == 'Unknown' %}selected{% endif %}>Select your country (Optional)</option>
+                        <option value="USA" {% if current_user.country == 'USA' %}selected{% endif %}>USA 🇺🇸</option>
+                        <option value="Canada" {% if current_user.country == 'Canada' %}selected{% endif %}>Canada 🇨🇦</option>
+                        <option value="UK" {% if current_user.country == 'UK' %}selected{% endif %}>UK 🇬🇧</option>
+                        <option value="Germany" {% if current_user.country == 'Germany' %}selected{% endif %}>Germany 🇩🇪</option>
+                        <option value="France" {% if current_user.country == 'France' %}selected{% endif %}>France 🇫🇷</option>
+                        <option value="India" {% if current_user.country == 'India' %}selected{% endif %}>India 🇮🇳</option>
+                        <option value="Japan" {% if current_user.country == 'Japan' %}selected{% endif %}>Japan 🇯🇵</option>
+                        <option value="Australia" {% if current_user.country == 'Australia' %}selected{% endif %}>Australia 🇦🇺</option>
+                        <option value="Brazil" {% if current_user.country == 'Brazil' %}selected{% endif %}>Brazil 🇧🇷</option>
+                        <option value="China" {% if current_user.country == 'China' %}selected{% endif %}>China 🇨🇳</option>
+                        <option value="Other" {% if current_user.country == 'Other' %}selected{% endif %}>Other ❓</option>
+                    </select>
+                </div>
+                
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <a href="{{ url_for('profile', username=current_user.username) }}" class="btn btn-outline-light">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

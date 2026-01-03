@@ -9,11 +9,28 @@
                     <label class="form-label">Username</label>
                     <input type="text" name="username" class="form-control" required>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label">Password</label>
-                    <input type="password" name="password" class="form-control" required>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Register</button>
+            <div class="mb-3">
+                <label for="password" class="form-label text-white">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <div class="mb-3">
+                <label for="country" class="form-label text-white">Country</label>
+                <select class="form-select" id="country" name="country">
+                    <option value="Unknown" selected>Select your country (Optional)</option>
+                    <option value="USA">USA</option>
+                    <option value="Canada">Canada</option>
+                    <option value="UK">UK</option>
+                    <option value="Germany">Germany</option>
+                    <option value="France">France</option>
+                    <option value="India">India</option>
+                    <option value="Japan">Japan</option>
+                    <option value="Australia">Australia</option>
+                    <option value="Brazil">Brazil</option>
+                    <option value="China">China</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Register</button>
             </form>
         </div>
     </div>
