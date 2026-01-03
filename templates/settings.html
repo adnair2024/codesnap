@@ -44,6 +44,35 @@
                     <a href="{{ url_for('profile', username=current_user.username) }}" class="btn btn-outline-light">Cancel</a>
                 </div>
             </form>
+
+            <hr class="my-4 text-white-50">
+            
+            <div class="d-grid">
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                    Delete Account
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content glass-container" style="background: rgba(255, 59, 48, 0.1); backdrop-filter: blur(25px); border: 1px solid rgba(255, 255, 255, 0.1);">
+            <div class="modal-header border-0">
+                <h5 class="modal-title text-white" id="deleteModalLabel">Delete Account?</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-white">
+                This action is permanent and cannot be undone. All your snippets and votes will be permanently deleted.
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancel</button>
+                <form action="{{ url_for('delete_account') }}" method="POST">
+                    <button type="submit" class="btn btn-danger">Delete Permanently</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
