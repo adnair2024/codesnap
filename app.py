@@ -290,6 +290,33 @@ def stats():
         country_data=country_data
     )
 
+@app.route('/admin')
+@login_required
+def admin_dashboard():
+    if current_user.id != 1:
+        flash('Unauthorized access')
+        return redirect(url_for('index'))
+    users = User.query.all()
+    return render_template('admin.html', users=users)
+
+@app.route('/admin/delete/<int:user_id>', methods=['POST'])
+@login_required
+def admin_delete_user(user_id):
+    if current_user.id != 1:
+        flash('Unauthorized access')
+        return redirect(url_for('index'))
+    if user_id == 1:
+        flash('Cannot delete admin user')
+        return redirect(url_for('admin_dashboard'))
+        
+    user = User.query.get_or_404(user_id)
+    # Delete associated votes first (though cascade might handle it, it's safer to rely on cascade but good to be aware)
+    # The models have cascade="all, delete-orphan", so we can just delete the user.
+    db.session.delete(user)
+    db.session.commit()
+    flash(f'User {user.username} deleted')
+    return redirect(url_for('admin_dashboard'))
+
 @app.route('/settings', methods=['GET', 'POST'])
 @login_required
 def settings():
