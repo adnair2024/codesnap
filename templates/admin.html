@@ -22,7 +22,7 @@
                             <td>{{ user.id }}</td>
                             <td>
                                 <a href="{{ url_for('profile', username=user.username) }}" class="text-white text-decoration-none">
-                                    {{ user.username }}
+                                    {{ user.username }} {{ verified_badge(user.id)|safe }}
                                 </a>
                             </td>
                             <td>{{ user.country|flag }} {{ user.country }}</td>

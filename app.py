@@ -62,6 +62,14 @@ def flag_filter(country_name):
     }
     return flags.get(country_name, '❓')
 
+@app.context_processor
+def utility_processor():
+    def verified_badge(user_id):
+        if user_id == 1:
+            return '<span class="text-primary ms-1" title="Verified Admin" style="vertical-align: text-bottom;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-patch-check-fill" viewBox="0 0 16 16"><path d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.896.011a2.89 2.89 0 0 0-2.924 2.924l.01.896-.636.622a2.89 2.89 0 0 0 0 4.134l.638.622-.011.896a2.89 2.89 0 0 0 2.924 2.924l.896-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.896-.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.896.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.896a2.89 2.89 0 0 0-2.924-2.924l-.896.01-.622-.636zm.287 5.984-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708z"/></svg></span>'
+        return ''
+    return dict(verified_badge=verified_badge)
+
 @app.route('/')
 def index():
     public_snippets = Snippet.query.filter_by(is_public=True).order_by(Snippet.created_at.desc()).limit(10).all()
@@ -347,6 +355,16 @@ def settings():
         return redirect(url_for('profile', username=user.username))
         
     return render_template('settings.html')
+
+@app.route('/settings/delete', methods=['POST'])
+@login_required
+def delete_account():
+    user = User.query.get(current_user.id)
+    logout_user()
+    db.session.delete(user)
+    db.session.commit()
+    flash('Your account has been permanently deleted.')
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)

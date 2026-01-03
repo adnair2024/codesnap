@@ -28,7 +28,7 @@
                 <ul class="list-group list-group-flush bg-transparent">
                     {% for user in top_snippet_users %}
                     <li class="list-group-item bg-transparent text-white d-flex justify-content-between align-items-center border-bottom border-secondary">
-                        <span>#{{ loop.index }} {{ user.username }} {{ user.country|flag }}</span>
+                        <span>#{{ loop.index }} {{ user.username }} {{ verified_badge(user.id)|safe }} {{ user.country|flag }}</span>
                         <span class="badge bg-primary rounded-pill">{{ user.count }}</span>
                     </li>
                     {% endfor %}
@@ -46,7 +46,7 @@
                 <ul class="list-group list-group-flush bg-transparent">
                     {% for user in top_reputation_users %}
                     <li class="list-group-item bg-transparent text-white d-flex justify-content-between align-items-center border-bottom border-secondary">
-                        <span>#{{ loop.index }} {{ user.username }} {{ user.country|flag }}</span>
+                        <span>#{{ loop.index }} {{ user.username }} {{ verified_badge(user.id)|safe }} {{ user.country|flag }}</span>
                         <span class="badge bg-success rounded-pill">{{ user.reputation }}</span>
                     </li>
                     {% endfor %}
