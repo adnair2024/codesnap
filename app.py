@@ -18,6 +18,13 @@ if db_url.startswith("postgres://"):
 app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+    "pool_pre_ping": True,  # Checks connection health before every query
+    "pool_recycle": 300,    # Refreshes connections every 5 minutes to prevent SSL timeout
+    "pool_size": 5,         # Limits local connections to help with "Max Connections" issues
+    "max_overflow": 0,      # Prevents app from creating extra connections beyond pool_size
+}
+
 db.init_app(app)
 
 # Ensure tables are created on startup
