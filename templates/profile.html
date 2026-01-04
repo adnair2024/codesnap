@@ -44,18 +44,23 @@
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><button class="dropdown-item" onclick="navigator.clipboard.writeText('{{ url_for('view_snippet', snippet_id=snippet.id, _external=True) }}'); alert('Link copied!');">Copy Link</button></li>
-                                {% if current_user.is_authenticated and current_user.id == user.id %}
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('edit_snippet', snippet_id=snippet.id) }}">Edit</a></li>
-                                    <li><a class="dropdown-item" href="{{ url_for('toggle_privacy', snippet_id=snippet.id) }}">
-                                        Make {{ 'Private' if snippet.is_public else 'Public' }}
-                                    </a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li>
-                                        <form action="{{ url_for('delete_snippet', snippet_id=snippet.id) }}" method="POST">
-                                            <button type="submit" class="dropdown-item text-danger" onclick="return confirm('Are you sure?')">Delete</button>
-                                        </form>
-                                    </li>
+                                {% if current_user.is_authenticated %}
+                                    {% if current_user.id == snippet.owner.id %}
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('edit_snippet', snippet_id=snippet.id) }}">Edit</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('toggle_privacy', snippet_id=snippet.id) }}">
+                                            Make {{ 'Private' if snippet.is_public else 'Public' }}
+                                        </a></li>
+                                    {% endif %}
+                                    
+                                    {% if current_user.id == snippet.owner.id or current_user.id == 1 or current_user.is_moderator %}
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <form action="{{ url_for('delete_snippet', snippet_id=snippet.id) }}" method="POST">
+                                                <button type="submit" class="dropdown-item text-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                                            </form>
+                                        </li>
+                                    {% endif %}
                                 {% endif %}
                             </ul>
                         </div>

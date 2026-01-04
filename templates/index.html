@@ -27,6 +27,14 @@
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><button class="dropdown-item" onclick="navigator.clipboard.writeText('{{ url_for('view_snippet', snippet_id=snippet.id, _external=True) }}'); alert('Link copied!');">Copy Link</button></li>
                                 <li><a class="dropdown-item" href="{{ url_for('view_snippet', snippet_id=snippet.id) }}">View Details</a></li>
+                                {% if current_user.is_authenticated and (current_user.id == snippet.owner.id or current_user.id == 1 or current_user.is_moderator) %}
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <form action="{{ url_for('delete_snippet', snippet_id=snippet.id) }}" method="POST">
+                                            <button type="submit" class="dropdown-item text-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                                        </form>
+                                    </li>
+                                {% endif %}
                             </ul>
                         </div>
                     </div>
