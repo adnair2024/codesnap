@@ -10,6 +10,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(256), nullable=False)
     country = db.Column(db.String(50), default='Unknown')
+    is_moderator = db.Column(db.Boolean, default=False)
     snippets = db.relationship('Snippet', backref='owner', lazy=True, cascade="all, delete-orphan")
     votes = db.relationship('Vote', backref='user', lazy=True, cascade="all, delete-orphan")
 
@@ -18,6 +19,15 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+class AdminLog(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    admin_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True) # nullable in case admin is deleted? unlikely but safe
+    action = db.Column(db.String(100), nullable=False)
+    details = db.Column(db.Text, nullable=True)
+    
+    admin = db.relationship('User', foreign_keys=[admin_id])
 
 class Snippet(db.Model):
     id = db.Column(db.Integer, primary_key=True)

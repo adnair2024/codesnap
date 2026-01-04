@@ -2,55 +2,94 @@
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-6">
+    <div class="col-md-8">
         <div class="glass-container p-4">
-            <h2 class="text-white mb-4 text-center">Profile Settings</h2>
+            <h2 class="text-white mb-4 text-center">Settings</h2>
             
-            <form method="POST">
-                <!-- Username -->
-                <div class="mb-3">
-                    <label for="username" class="form-label text-white">Username</label>
-                    <input type="text" class="form-control" id="username" name="username" value="{{ current_user.username }}" required>
-                    <div class="form-text text-white-50">Choose a unique username.</div>
-                </div>
-                
-                <!-- Password -->
-                <div class="mb-3">
-                    <label for="password" class="form-label text-white">New Password</label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Leave blank to keep current password">
-                </div>
-                
-                <!-- Country -->
-                <div class="mb-3">
-                    <label for="country" class="form-label text-white">Country</label>
-                    <select class="form-select" id="country" name="country">
-                        <option value="Unknown" {% if current_user.country == 'Unknown' %}selected{% endif %}>Select your country (Optional)</option>
-                        <option value="USA" {% if current_user.country == 'USA' %}selected{% endif %}>USA 🇺🇸</option>
-                        <option value="Canada" {% if current_user.country == 'Canada' %}selected{% endif %}>Canada 🇨🇦</option>
-                        <option value="UK" {% if current_user.country == 'UK' %}selected{% endif %}>UK 🇬🇧</option>
-                        <option value="Germany" {% if current_user.country == 'Germany' %}selected{% endif %}>Germany 🇩🇪</option>
-                        <option value="France" {% if current_user.country == 'France' %}selected{% endif %}>France 🇫🇷</option>
-                        <option value="India" {% if current_user.country == 'India' %}selected{% endif %}>India 🇮🇳</option>
-                        <option value="Japan" {% if current_user.country == 'Japan' %}selected{% endif %}>Japan 🇯🇵</option>
-                        <option value="Australia" {% if current_user.country == 'Australia' %}selected{% endif %}>Australia 🇦🇺</option>
-                        <option value="Brazil" {% if current_user.country == 'Brazil' %}selected{% endif %}>Brazil 🇧🇷</option>
-                        <option value="China" {% if current_user.country == 'China' %}selected{% endif %}>China 🇨🇳</option>
-                        <option value="Other" {% if current_user.country == 'Other' %}selected{% endif %}>Other ❓</option>
-                    </select>
-                </div>
-                
-                <div class="d-grid gap-2">
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                    <a href="{{ url_for('profile', username=current_user.username) }}" class="btn btn-outline-light">Cancel</a>
-                </div>
-            </form>
+            <!-- Tabs Navigation -->
+            <ul class="nav nav-tabs mb-4 border-secondary" id="settingsTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active text-white border-0 bg-transparent" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="true">Profile</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link text-white border-0 bg-transparent" id="activity-tab" data-bs-toggle="tab" data-bs-target="#activity" type="button" role="tab" aria-controls="activity" aria-selected="false">Logs</button>
+                </li>
+            </ul>
 
-            <hr class="my-4 text-white-50">
-            
-            <div class="d-grid">
-                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                    Delete Account
-                </button>
+            <div class="tab-content" id="settingsTabsContent">
+                <!-- Profile Tab -->
+                <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="username" class="form-label text-white">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" value="{{ current_user.username }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="password" class="form-label text-white">New Password</label>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Leave blank to keep current password">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="country" class="form-label text-white">Country</label>
+                            <select class="form-select" id="country" name="country">
+                                <option value="Unknown" {% if current_user.country == 'Unknown' %}selected{% endif %}>Select your country (Optional)</option>
+                                <option value="USA" {% if current_user.country == 'USA' %}selected{% endif %}>USA 🇺🇸</option>
+                                <option value="Canada" {% if current_user.country == 'Canada' %}selected{% endif %}>Canada 🇨🇦</option>
+                                <option value="UK" {% if current_user.country == 'UK' %}selected{% endif %}>UK 🇬🇧</option>
+                                <option value="Germany" {% if current_user.country == 'Germany' %}selected{% endif %}>Germany 🇩🇪</option>
+                                <option value="France" {% if current_user.country == 'France' %}selected{% endif %}>France 🇫🇷</option>
+                                <option value="India" {% if current_user.country == 'India' %}selected{% endif %}>India 🇮🇳</option>
+                                <option value="Japan" {% if current_user.country == 'Japan' %}selected{% endif %}>Japan 🇯🇵</option>
+                                <option value="Australia" {% if current_user.country == 'Australia' %}selected{% endif %}>Australia 🇦🇺</option>
+                                <option value="Brazil" {% if current_user.country == 'Brazil' %}selected{% endif %}>Brazil 🇧🇷</option>
+                                <option value="China" {% if current_user.country == 'China' %}selected{% endif %}>China 🇨🇳</option>
+                                <option value="Other" {% if current_user.country == 'Other' %}selected{% endif %}>Other ❓</option>
+                            </select>
+                        </div>
+                        
+                        <div class="d-grid gap-2 mb-4">
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+
+                    <hr class="my-4 text-white-50">
+                    
+                    <div class="d-grid">
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                            Delete Account
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Activity/Logs Tab -->
+                <div class="tab-pane fade" id="activity" role="tabpanel" aria-labelledby="activity-tab">
+                    <div class="table-responsive">
+                        <table class="table table-dark table-striped" style="background: transparent;">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Timestamp</th>
+                                    <th scope="col">Action</th>
+                                    <th scope="col">Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for log in logs %}
+                                <tr>
+                                    <td><small>{{ log.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</small></td>
+                                    <td><span class="badge bg-primary">{{ log.action }}</span></td>
+                                    <td><small>{{ log.details }}</small></td>
+                                </tr>
+                                {% endfor %}
+                                {% if not logs %}
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted">No activity logs found.</td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -76,4 +115,18 @@
         </div>
     </div>
 </div>
+
+<style>
+    .nav-tabs .nav-link {
+        border-bottom: 2px solid transparent !important;
+        transition: all 0.3s ease;
+    }
+    .nav-tabs .nav-link.active {
+        border-bottom: 2px solid #0d6efd !important;
+        color: #0d6efd !important;
+    }
+    .nav-tabs .nav-link:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+</style>
 {% endblock %}
