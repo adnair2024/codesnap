@@ -18,7 +18,11 @@
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <h3><a href="{{ url_for('profile', username=snippet.owner.username) }}" class="text-decoration-none text-white">{{ snippet.title }}</a></h3>
-                            <p class="text-muted">by @{{ snippet.owner.username }} {{ verified_badge(snippet.owner.id)|safe }} {{ snippet.owner.country|flag }}</p>
+                            <p class="text-muted mb-2">by @{{ snippet.owner.username }} {{ verified_badge(snippet.owner.id)|safe }} {{ snippet.owner.country|flag }}</p>
+                            <div class="mb-2">
+                                <span class="badge badge-public">Public</span>
+                                <span class="badge badge-lang badge-lang-{{ snippet.language.lower() }}">{{ snippet.language }}</span>
+                            </div>
                         </div>
                         <div class="dropdown">
                             <button class="btn btn-sm btn-link text-white text-decoration-none" type="button" data-bs-toggle="dropdown" aria-expanded="false">

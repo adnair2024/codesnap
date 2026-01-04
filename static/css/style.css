@@ -64,6 +64,12 @@ body {
     min-width: 0; /* Allows children (pre) to overflow/scroll within a flex item */
 }
 
+.badge {
+    border-radius: 8px;
+    padding: 0.5em 0.8em;
+    font-weight: 600;
+}
+
 .badge-private {
     background: rgba(255, 59, 48, 0.2);
     color: #ff3b30;
@@ -75,6 +81,27 @@ body {
     color: #34c759;
     border: 1px solid rgba(52, 199, 89, 0.3);
 }
+
+/* Language Badges */
+.badge-lang {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-transform: capitalize;
+}
+
+.badge-lang-python { background: rgba(55, 118, 171, 0.2); color: #3776ab; border: 1px solid rgba(55, 118, 171, 0.3); }
+.badge-lang-javascript, .badge-lang-js { background: rgba(247, 223, 30, 0.2); color: #f7df1e; border: 1px solid rgba(247, 223, 30, 0.3); }
+.badge-lang-html { background: rgba(227, 79, 38, 0.2); color: #e34f26; border: 1px solid rgba(227, 79, 38, 0.3); }
+.badge-lang-css { background: rgba(21, 114, 182, 0.2); color: #1572b6; border: 1px solid rgba(21, 114, 182, 0.3); }
+.badge-lang-php { background: rgba(119, 123, 179, 0.2); color: #777bb3; border: 1px solid rgba(119, 123, 179, 0.3); }
+.badge-lang-ruby { background: rgba(173, 20, 14, 0.2); color: #ad140e; border: 1px solid rgba(173, 20, 14, 0.3); }
+.badge-lang-go { background: rgba(0, 173, 216, 0.2); color: #00add8; border: 1px solid rgba(0, 173, 216, 0.3); }
+.badge-lang-rust { background: rgba(222, 165, 132, 0.2); color: #dea584; border: 1px solid rgba(222, 165, 132, 0.3); }
+.badge-lang-java { background: rgba(0, 115, 150, 0.2); color: #007396; border: 1px solid rgba(0, 115, 150, 0.3); }
+.badge-lang-cpp, .badge-lang-cplusplus { background: rgba(0, 68, 130, 0.2); color: #004482; border: 1px solid rgba(0, 68, 130, 0.3); }
+.badge-lang-sql { background: rgba(233, 137, 37, 0.2); color: #e98925; border: 1px solid rgba(233, 137, 37, 0.3); }
+.badge-lang-typescript, .badge-lang-ts { background: rgba(49, 120, 198, 0.2); color: #3178c6; border: 1px solid rgba(49, 120, 198, 0.3); }
 
 pre {
     border-radius: 12px;

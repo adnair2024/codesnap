@@ -32,13 +32,15 @@
                                     <p class="text-muted mb-1">by @{{ snippet.owner.username }} {{ verified_badge(snippet.owner.id)|safe }} {{ snippet.owner.country|flag }}</p>
                                     <small class="text-muted">{{ snippet.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
                                 </div>
-                                <div>                        {% if snippet.is_public %}
-                            <span class="badge badge-public">Public</span>
-                        {% else %}
-                            <span class="badge badge-private">Private</span>
-                        {% endif %}
-                        
-                        <div class="dropdown d-inline ms-2">
+                                <div>
+                                    {% if snippet.is_public %}
+                                        <span class="badge badge-public">Public</span>
+                                    {% else %}
+                                        <span class="badge badge-private">Private</span>
+                                    {% endif %}
+                                    <span class="badge badge-lang badge-lang-{{ snippet.language.lower() }}">{{ snippet.language }}</span>
+                                    
+                                    <div class="dropdown d-inline ms-2">
                             <button class="btn btn-sm btn-link text-white text-decoration-none" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <span style="font-size: 1.2rem;">⋮</span>
                             </button>

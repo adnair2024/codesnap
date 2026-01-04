@@ -13,6 +13,7 @@ class User(UserMixin, db.Model):
     is_moderator = db.Column(db.Boolean, default=False)
     snippets = db.relationship('Snippet', backref='owner', lazy=True, cascade="all, delete-orphan")
     votes = db.relationship('Vote', backref='user', lazy=True, cascade="all, delete-orphan")
+    logs = db.relationship('AdminLog', backref='admin', lazy=True, cascade="all, delete-orphan", foreign_keys='AdminLog.admin_id')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -23,11 +24,9 @@ class User(UserMixin, db.Model):
 class AdminLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-    admin_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True) # nullable in case admin is deleted? unlikely but safe
+    admin_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=True)
     action = db.Column(db.String(100), nullable=False)
     details = db.Column(db.Text, nullable=True)
-    
-    admin = db.relationship('User', foreign_keys=[admin_id])
 
 class Snippet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
